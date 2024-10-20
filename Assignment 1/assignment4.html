@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment 4</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/8066c399ae.js" crossorigin="anonymous"></script>
+    <style>
+        .navbar{
+            display: flex;
+            justify-content: space-between;
+        }
+        .text-light{
+            color: whitesmoke;
+        }
+        .text-dark{
+            color: black;
+        }
+
+        .task{
+            display: flex;
+            padding: 2px;
+            border-radius: 5px;
+        }
+        .task_importance-level-1{
+            background-color: khaki;
+        }
+        .task_importance-level-2{
+            background-color: rgb(240, 177, 140);
+        }
+        .task_importance-level-3{
+            background-color: rgb(245, 134, 134);
+        }
+
+        li{
+            list-style-type: none;
+        }
+    </style>
+</head>
+<body class="body bg-light">
+    
+    <header class="nav bg-warning">
+        <div class="navbar container">
+            <strong style="font-size: 36px;">Assignment 4</strong>
+            <div class="">
+                <button class="btn btn-dark" id="toggle-theme" onclick="toggleTheme()">Dark</button>
+            </div>
+        </div>
+        
+    </header>
+
+    <div class="container w-50">
+        <h2>To-Do List</h2>
+        <input type="text" id="taskInput" placeholder="Enter task" class="form-control w-50 mb-2">
+        <button onclick="addTask()" class="btn btn-warning mb-2">Add Task</button>
+        <ul id="taskList"></ul>
+    </div>
+
+
+    <div class="container w-50">
+        <h2>Number Sorter</h2>
+        <input type="number" id="numberInput" placeholder="Enter a number" class="form-control w-50 mb-2" onkeydown="if(event.keyCode == 13) {inputNumber()}">
+        <button onclick="inputNumber()" class="btn btn-warning">Enter</button>
+        <small class="text-muted form-text" id="sorter_invalidInput" style="display: none;">Invalid input! Please enter positive number.</small>
+        <div class="btn-group">
+            <button type="button" id="orderChange" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Order
+            </button>
+            <div class="dropdown-menu" aria-labelledby="orderChange">
+                <a class="dropdown-item" href="#" onclick="ascendingOrder()">Ascending</a>
+                <a class="dropdown-item" href="#" onclick="descendingOrder()">Descending</a>
+            </div>
+        </div>
+        <p>The result: <span id="sorter_result"></span></p>
+
+        <script>
+            var sortOrderAscending = true;
+            var numberArray = [];
+            var input = document.getElementById("numberInput");
+            
+            function ascendingOrder(){
+                sortOrderAscending = true;
+                sortNumbers();
+            }
+            function descendingOrder() {
+                sortOrderAscending = false;
+                sortNumbers();
+            }
+
+            function inputNumber() {
+                var input = document.getElementById("numberInput");
+                var number = parseInt(input.value);
+                input.value = "";
+                if(isNaN(number) || number <= 0){
+                    document.getElementById("sorter_invalidInput").style.display = "inline-block";
+                    return;
+                }else{
+                    document.getElementById("sorter_invalidInput").style.display = "none";
+                    numberArray.push(number);
+                    sortNumbers();
+                }
+            }
+
+            function sortNumbers() {
+                
+                var sortedNumbers = numberArray.slice().sort(function(a, b) {
+                    if(sortOrderAscending) return a - b;
+                    else return b - a;
+                });
+                document.getElementById("sorter_result").innerText = sortedNumbers.join(", ");
+            }
+        </script>
+    </div>
+
+    <div class="container w-50">
+        <h2>Simple Calculator</h2>
+        <input type="number" id="num1" placeholder="Enter first number" class="form-control w-50 mb-2">
+        <input type="number" id="num2" placeholder="Enter second number" class="form-control w-50 mb-2">
+        <button onclick="plus()" class="btn btn-warning">+</button>
+        <button onclick="minus()" class="btn btn-warning">-</button>
+        <button onclick="multiply()" class="btn btn-warning">*</button>
+        <button onclick="divide()" class="btn btn-warning">/</button>
+        <p>The result: <span id="calculator-result"></span></p>
+
+        <script>
+            num1 = "";
+            num2 = "";
+            function inputCalc(){
+                num1 = document.getElementById('num1').value;
+                num2 = document.getElementById('num2').value;
+            }
+
+            function isValidInput(){
+                if(num1 == null || num2 == null){
+                    alert('Please enter a valid input');
+                    return false;
+                }
+                return true;
+            }
+
+            function clearInput(){
+                num1 = document.getElementById('num1');
+                num2 = document.getElementById('num2');
+                num1.value = "";
+                num2.value = "";
+            }
+
+            function plus(){
+                inputCalc();
+                if(isValidInput()){
+                    document.getElementById('calculator-result').innerText = parseFloat(num1) + parseFloat(num2);
+                    clearInput();
+                }
+            }
+
+            function minus(){
+                inputCalc();
+                if(isValidInput()){
+                    document.getElementById('calculator-result').innerText = parseFloat(num1) - parseFloat(num2);
+                    clearInput();
+                }
+            }
+
+            function multiply(){
+                inputCalc();
+                if(isValidInput()){
+                    document.getElementById('calculator-result').innerText = parseFloat(num1) * parseFloat(num2);
+                    clearInput();
+                }
+            }
+
+            function divide(){
+                inputCalc();
+                if(isValidInput()){
+                    if(num2 == 0){
+                        alert('Cannot divide by zero');
+                        return;
+                    }
+                    document.getElementById('calculator-result').innerText = parseFloat(num1) / parseFloat(num2);
+                    clearInput();
+                }
+            }
+        </script>
+    </div>
+    
+    <div class="container w-50">
+        <h2>Tax Calculator</h2>
+        <input type="number" id="amount" placeholder="Enter amount" class="form-control w-50 mb-2" onchange="calculateTax()">
+        <p>Tax: <span id="tax"></span></p>
+        <script>
+            var amount = document.getElementById('amount');
+            var taxRate = 0;
+
+            function calculateTax() {
+                var amountValue = parseFloat(amount.value);
+                if(amountValue < 5000) taxRate = 0.15;
+                else if(amountValue >= 5000 && amountValue < 10000) taxRate = 0.20;
+                else taxRate = 0.25;
+                var tax = amountValue * taxRate;
+                document.getElementById('tax').innerText = "$" + tax.toFixed(2);
+            }
+        </script>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+
+        let darkTheme = false;
+
+        function toggleTheme(){
+            var body = document.querySelector('.body');
+            var togglebtn = document.getElementById('toggle-theme');
+            var texts = document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li');
+
+            if(body.classList.contains('bg-light')){
+                body.classList.remove('bg-light');
+                body.classList.add('bg-dark');
+                togglebtn.classList.remove('btn-dark');
+                togglebtn.classList.add('btn-light');
+                togglebtn.textContent = "Light";
+
+                darkTheme = true;
+                
+                texts.forEach(function(text) {
+                    text.classList.remove('text-dark');
+                    text.classList.add('text-light');
+                });
+            } else {
+                body.classList.remove('bg-dark');
+                body.classList.add('bg-light');
+                togglebtn.classList.remove('btn-light');
+                togglebtn.classList.add('btn-dark');
+                togglebtn.textContent = "Dark";
+
+                darkTheme = false;
+                
+                texts.forEach(function(text) {
+                    text.classList.remove('text-light');
+                    text.classList.add('text-dark');
+                });
+            }
+        }
+
+        function addTask() { // Pipets kak dolgo delal
+            var input = document.getElementById("taskInput");
+            var task = input.value.trim();
+
+            if (task === "") {
+                alert("You must type something");
+                return;
+            }
+
+            // Create task element and add to list
+            var div = document.createElement("div");
+            div.classList.add("task", "task_importance-level-1");
+            div.classList.add("mb-1", "w-100", "d-flex", "flex-row", "justify-content-between", "align-items-center");
+            var li = document.createElement("li");
+            li.textContent = task;
+            if(darkTheme) li.classList.add("text-light");
+            else li.classList.add("text-dark");
+            var buttons = document.createElement("div");
+            
+
+            // EDIT DROPDOWN BUTTON
+            var editDropdown = document.createElement("div");
+            editDropdown.style.display = "inline-block";
+            var editButton = document.createElement("button");
+            editButton.textContent = "Edit";
+            editDropdown.classList.add("dropdown");
+            editButton.classList.add("dropdown-toggle", "btn", "btn-primary");
+            editButton.ariaHasPopup = true;
+            editButton.setAttribute("data-bs-toggle", "dropdown");
+            editButton.ariaExpanded = false;
+            editButton.id = "editButton";
+
+            var editDropdownMenu = document.createElement("div");
+            editDropdownMenu.classList.add("dropdown-menu");
+            editDropdownMenu.setAttribute("aria-labelledby", "editButton");
+            var editDropdownOption_1 = document.createElement("a");
+            var editDropdownOption_2 = document.createElement("a");
+            var editDropdownOption_3 = document.createElement("a");
+            editDropdownOption_1.textContent = "Urgent";
+            editDropdownOption_2.textContent = "Important";
+            editDropdownOption_3.textContent = "Not important";
+            editDropdownOption_1.classList.add("dropdown-item");
+            editDropdownOption_2.classList.add("dropdown-item");
+            editDropdownOption_3.classList.add("dropdown-item");
+
+            editDropdownOption_1.addEventListener("click", function(){
+                div.classList.remove("task_importacne-level-2");
+                div.classList.remove("task_importacne-level-1");
+                div.classList.add("task_importance-level-3");
+            });
+            editDropdownOption_2.addEventListener("click", function(){
+                div.classList.remove("task_importance-level-1");
+                div.classList.remove("task_importance-level-3");
+                div.classList.add("task_importance-level-2");
+            });
+            editDropdownOption_3.addEventListener("click", function() {
+                div.classList.remove("task_importance-level-3");
+                div.classList.remove("task_importance-level-2");
+                div.classList.add("task_importance-level-1");
+            });
+
+            editDropdownMenu.appendChild(editDropdownOption_1);
+            editDropdownMenu.appendChild(editDropdownOption_2);
+            editDropdownMenu.appendChild(editDropdownOption_3);
+            editDropdown.appendChild(editButton);
+            editDropdown.appendChild(editDropdownMenu);
+            
+            
+            
+            // COMPLETE BUTTON
+            var completeButton = document.createElement("button");
+            completeButton.textContent = "Complete";
+            completeButton.classList.add("btn", "btn-success");
+            completeButton.onclick = function () {
+                li.style.textDecoration = "line-through";
+            };
+            // DELETE BUTTON
+            var deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.classList.add("btn", "btn-danger"); //
+            deleteButton.onclick = function () {
+                div.remove();
+            };
+
+
+            // APPEND BUTTONS TO TASK
+            buttons.appendChild(editDropdown);
+            buttons.appendChild(completeButton);
+            buttons.appendChild(deleteButton);
+            div.appendChild(li);
+            div.appendChild(buttons);
+            document.getElementById("taskList").appendChild(div);
+
+            input.value = "";
+        }
+    </script>
+</body>
+</html>
